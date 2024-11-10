@@ -1,6 +1,7 @@
 <script lang="ts">
-	import Circle from '$lib';
+	import { Circle } from '$lib';
 	import { container } from '$lib/container.svelte';
+	import { Line } from '$lib/line';
 	import { mouse } from '$lib/mouse.svelte';
 	import { distance } from '$lib/utils';
 	import { onMount } from 'svelte';
@@ -62,15 +63,31 @@
 
 					const dist = distance(firstCircle.x, firstCircle.y, secondCircle.x, secondCircle.y);
 
+
 					if (dist <= 100 && secondCircle.color === firstCircle.color) {
-						ctx.beginPath();
-						ctx.moveTo(secondCircle.x, secondCircle.y);
-						ctx.strokeStyle = secondCircle.color;
-						ctx.lineWidth = 2;
-						ctx.lineTo(firstCircle.x, firstCircle.y);
-						ctx.stroke();
-						ctx.closePath();
+
+						new Line(
+							ctx,
+							secondCircle.x,
+							secondCircle.y,
+							firstCircle.x,
+							firstCircle.y,
+							secondCircle.color,
+							2
+						).draw();
 					}
+				}
+
+				if (distance(mouse.x, mouse.y, firstCircle.x, firstCircle.y) < 100) {
+					new Line(
+						ctx,
+						mouse.x,
+						mouse.y,
+						firstCircle.x,
+						firstCircle.y,
+						firstCircle.color,
+						2
+					).draw();
 				}
 			}
 		};
@@ -80,7 +97,7 @@
 			ctx.clearRect(0, 0, container.width, container.height);
 
 			circles.forEach((circle) => circle.update());
-      connect(circles);
+			connect(circles);
 		})();
 
 		init();
