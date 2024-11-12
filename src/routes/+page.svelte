@@ -3,7 +3,7 @@
 	import { container } from '$lib/container.svelte';
 	import { Line } from '$lib/line';
 	import { mouse } from '$lib/mouse.svelte';
-	import { distance } from '$lib/utils';
+	import { distance, getNumberOfCircles } from '$lib/utils';
 	import { onMount } from 'svelte';
 
 	let canvas: HTMLCanvasElement | undefined = $state();
@@ -43,8 +43,13 @@
 
 		const init = () => {
 			circles = [];
+			if (!canvas) return;
 
-			for (let i = 0; i < 300; i++) {
+			const amount = getNumberOfCircles(window.innerWidth);
+
+      console.log(amount)
+
+			for (let i = 0; i < amount; i++) {
 				const radius = Math.random() * 5 + 2;
 				const x = Math.random() * (container.width - radius * 2) + radius;
 				const y = Math.random() * (container.height - radius * 2) + radius;
@@ -63,9 +68,7 @@
 
 					const dist = distance(firstCircle.x, firstCircle.y, secondCircle.x, secondCircle.y);
 
-
 					if (dist <= 100 && secondCircle.color === firstCircle.color) {
-
 						new Line(
 							ctx,
 							secondCircle.x,
