@@ -38,6 +38,11 @@
 		const init = () => {
 			images = [];
 
+			for (let i = imageList.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[imageList[i], imageList[j]] = [imageList[j], imageList[i]];
+			}
+
 			imageList.forEach((entry) => {
 				const x = Math.min(
 					container.width - 1,
